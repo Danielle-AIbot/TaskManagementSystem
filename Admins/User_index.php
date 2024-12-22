@@ -44,7 +44,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
 
     <div class="menubar">
         <div class="account">
-            <img src="account.jpg" alt="Account Image">
+            <img src="<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
