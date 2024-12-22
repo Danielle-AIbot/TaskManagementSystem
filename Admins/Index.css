@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.menubar {
+    background-color: #333;
+    width: 200px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    text-align: center;
+    /* Center the content */
+    /* Align menu bar to the left */
+}
+
+.menubar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menubar li {
+    display: block;
+    /* Display menu items as block elements */
+}
+
+.menubar li a {
+    display: block;
+    color: white;
+    text-align: left;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menubar li a:hover {
+    background-color: #111;
+}
+
+.menubar .account {
+    padding: 20px;
+}
+
+.menubar .account img {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.menubar .account .username {
+    color: white;
+    margin-top: 10px;
+}
+
+.admin,
+.user {
+    margin-left: 220px;
+    /* Adjust margin to account for the fixed menu bar */
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.action-icon {
+    margin-right: 5px;
+    /* Add spacing between icon and text */
+}
