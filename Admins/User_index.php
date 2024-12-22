@@ -14,6 +14,16 @@ $sql_admin = "SELECT username FROM admin WHERE id = $admin_id";
 $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
+// Set the account image based on the username
+$account_image = 'account.jpg'; // Default image
+if ($admin['username'] == 'Danielle Mae') {
+    $account_image = 'dani.jpg';
+} elseif ($admin['username'] == 'Abegail') {
+    $account_image = 'abby.jpg';
+} elseif ($admin['username'] == 'Maria Luzviminda') {
+    $account_image = 'Luzvie.jpg';
+}
+
 // Fetch all users from the database
 $sql_users = "SELECT * FROM user";
 $result_users = mysqli_query($conn, $sql_users);

@@ -14,6 +14,16 @@ $sql_admin = "SELECT username FROM admin WHERE id = $admin_id";
 $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
+// Set the account image based on the username
+$account_image = 'account.jpg'; // Default image
+if ($admin['username'] == 'Danielle Mae') {
+    $account_image = 'dani.jpg';
+} elseif ($admin['username'] == 'Abegail') {
+    $account_image = 'abby.jpg';
+} elseif ($admin['username'] == 'Maria Luzviminda') {
+    $account_image = 'Luzvie.jpg';
+}
+
 // Fetch all admins from the database
 $sql_admins = "SELECT * FROM admin";
 $result_admins = mysqli_query($conn, $sql_admins);
@@ -34,7 +44,7 @@ $admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
 
     <div class="menubar">
         <div class="account">
-            <img src="account.jpg" alt="Account Image">
+            <img src="<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
