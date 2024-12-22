@@ -40,6 +40,7 @@ $admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
         <ul>
             <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
             <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
