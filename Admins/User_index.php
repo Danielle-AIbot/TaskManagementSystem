@@ -72,7 +72,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
                         <td><?php echo $user['username']; ?></td>
                         <td><?php echo $user['email']; ?></td>
                         <td>
-                            <img src="Users/Uploads/<?php echo $user['profpicture']; ?>" width="100">
+                            <img src="../Users/Uploads/<?php echo $user['profpicture']; ?>" width="100">
                         </td>
                         <td>
                             <a href="update.php?id=<?php echo $user['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
