@@ -29,18 +29,18 @@ $sql_users_count = "SELECT COUNT(*) AS count FROM user";
 $result_users_count = mysqli_query($conn, $sql_users_count);
 $users_count = mysqli_fetch_assoc($result_users_count)['count'];
 
-// $sql_tasks_count = "SELECT COUNT(*) AS count FROM tasks";
-// $result_tasks_count = mysqli_query($conn, $sql_tasks_count);
-// $tasks_count = mysqli_fetch_assoc($result_tasks_count)['count'];
+$sql_tasks_count = "SELECT COUNT(*) AS count FROM tasks";
+$result_tasks_count = mysqli_query($conn, $sql_tasks_count);
+$tasks_count = mysqli_fetch_assoc($result_tasks_count)['count'];
 
-// $sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status = 'completed'";
-// $result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
-// $completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
+$sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status = 'completed'";
+$result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
+$completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
 
 // Fetch recent activities
-// $sql_recent_activities = "SELECT * FROM activities ORDER BY created_at DESC LIMIT 5";
-// $result_recent_activities = mysqli_query($conn, $sql_recent_activities);
-// $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
+$sql_recent_activities = "SELECT * FROM activities ORDER BY created_at DESC LIMIT 5";
+$result_recent_activities = mysqli_query($conn, $sql_recent_activities);
+$recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
