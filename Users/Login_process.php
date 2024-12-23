@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Password is correct, start a session and redirect to the user dashboard
         session_start();
         $_SESSION['user_id'] = $user['id'];
-        header("Location: user.html");
+        header("Location: Dashboard.php");
         exit();
     } else {
         // Invalid credentials

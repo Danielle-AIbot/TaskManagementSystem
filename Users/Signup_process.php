@@ -18,7 +18,7 @@
 
             if(mysqli_query($conn, $sql))
             {
-                header("Location: User.html");
+                header("Location: Dashboard.php");
                 exit(); 
             }
             else
