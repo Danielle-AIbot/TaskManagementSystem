@@ -24,10 +24,23 @@ if ($admin['username'] == 'Danielle Mae') {
     $account_image = 'Luzvie.jpg';
 }
 
-// Fetch all users from the database
-$sql_users = "SELECT * FROM user";
-$result_users = mysqli_query($conn, $sql_users);
-$users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
+// Fetch statistics
+$sql_users_count = "SELECT COUNT(*) AS count FROM user";
+$result_users_count = mysqli_query($conn, $sql_users_count);
+$users_count = mysqli_fetch_assoc($result_users_count)['count'];
+
+$sql_tasks_count = "SELECT COUNT(*) AS count FROM tasks";
+$result_tasks_count = mysqli_query($conn, $sql_tasks_count);
+$tasks_count = mysqli_fetch_assoc($result_tasks_count)['count'];
+
+$sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status = 'completed'";
+$result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
+$completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
+
+// Fetch recent activities
+$sql_recent_activities = "SELECT * FROM activities ORDER BY created_at DESC LIMIT 5";
+$result_recent_activities = mysqli_query($conn, $sql_recent_activities);
+$recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -48,43 +61,37 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
+            <li>Dashboard</li>
             <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
             <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
-    <div class="user">
-        <h2>Users List</h2>
-        <table border="1" cellpadding="10" cellspacing="0">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Profile Image</th>
-                <th>Action</th>
-            </tr>
-            <?php if (!empty($users)) : ?>
-                <?php foreach ($users as $user) : ?>
-                    <tr>
-                        <td><?php echo $user['id']; ?></td>
-                        <td><?php echo $user['username']; ?></td>
-                        <td><?php echo $user['email']; ?></td>
-                        <td>
-                            <img src="uploads/<?php echo $user['profpicture']; ?>" width="100">
-                        </td>
-                        <td>
-                            <a href="update.php?id=<?php echo $user['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
-                            <a href="delete.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
-                        </td>
-                    </tr>
+    <div class="dashboard">
+        <h2>Welcome, <?php echo $admin['username']; ?>!</h2>
+        <div class="stats">
+            <div class="stat">
+                <h3><?php echo $users_count; ?></h3>
+                <p>Users</p>
+            </div>
+            <div class="stat">
+                <h3><?php echo $tasks_count; ?></h3>
+                <p>Tasks</p>
+            </div>
+            <div class="stat">
+                <h3><?php echo $completed_tasks_count; ?></h3>
+                <p>Completed Tasks</p>
+            </div>
+        </div>
+        <div class="recent-activities">
+            <h3>Recent Activities</h3>
+            <ul>
+                <?php foreach ($recent_activities as $activity) : ?>
+                    <li><?php echo $activity['description']; ?> - <?php echo $activity['created_at']; ?></li>
                 <?php endforeach; ?>
-            <?php else : ?>
-                <tr>
-                    <td colspan="5">No users found.</td>
-                </tr>
-            <?php endif; ?>
-        </table>
+            </ul>
+        </div>
     </div>
 
 </body>
