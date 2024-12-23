@@ -80,7 +80,7 @@ $users_count = mysqli_fetch_assoc($result_users_count)['count'];
                 <p>Tasks</p>
             </div>
             <div class="stat">
-                <!-- <h3><?php echo $completed_tasks_count; ?></h3> -->
+                <h3><?php echo $completed_tasks_count; ?></h3>
                 <p>Completed Tasks</p>
             </div>
         </div>
