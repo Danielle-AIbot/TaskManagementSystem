@@ -75,7 +75,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
                             <img src="../Users/Uploads/<?php echo $user['profpicture']; ?>" width="100">
                         </td>
                         <td>
-                            <a href="update.php?id=<?php echo $user['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
+                            <a href="update_user.php?id=<?php echo $user['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
                             <a href="delete.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
                         </td>
                     </tr>
