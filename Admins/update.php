@@ -12,6 +12,7 @@ $user = mysqli_fetch_assoc($result); // Fetch the user data
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h2>Edit User</h2>
