@@ -48,7 +48,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
-            <li>Dashboard</li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
             <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
