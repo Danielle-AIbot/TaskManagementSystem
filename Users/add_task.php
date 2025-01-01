@@ -2,13 +2,12 @@
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST['id'];
     $title = $_POST['title'];
     $description = $_POST['description'];
-    $status = $_POST['status'];
     $priority = $_POST['priority'];
+    $user_id = $_POST['user_id'];
 
-    $sql = "UPDATE tasks SET title='$title', description='$description', status='$status', priority='$priority' WHERE id=$id";
+    $sql = "INSERT INTO tasks (title, description, priority, status, user_id) VALUES ('$title', '$description', '$priority', 'Pending', $user_id)";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: Dashboard.php");
