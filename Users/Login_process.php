@@ -12,7 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && password_verify($password, $user['password'])) {
         session_start();
         $_SESSION['user_id'] = $user['id'];
-        header("Location: Dashboard.php");
+
+        // Log the login action
+        $user_id = $user['id'];
+        $activity = "Logged in";
+        $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
+        mysqli_query($conn, $sql_activity);
+
+        header("Location: dashboard copy.php");
         exit();
     } else {
         echo "Invalid username or password.";

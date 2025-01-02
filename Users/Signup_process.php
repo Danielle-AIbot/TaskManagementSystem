@@ -11,6 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
 
     if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+        // Log the signup action
+        $user_id = mysqli_insert_id($conn);
+        $activity = "Signed up";
         $sql = "INSERT INTO user (username, email, password, profpicture) VALUES ('$username', '$email', '$password', '$profile_image')";
 
         if (mysqli_query($conn, $sql)) {

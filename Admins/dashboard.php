@@ -37,10 +37,11 @@ $sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status =
 $result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
 $completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
 
-// Fetch recent activities
-$sql_recent_activities = "SELECT * FROM activities ORDER BY created_at DESC LIMIT 5";
+// Fetch recent activities of all users
+$sql_recent_activities = "SELECT username, activity, created_at FROM activities ORDER BY created_at DESC LIMIT 10";
 $result_recent_activities = mysqli_query($conn, $sql_recent_activities);
 $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +74,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
         <div class="stats">
             <div class="stat">
                 <h3><?php echo $users_count; ?></h3>
-                <p>Users</p>
+                <a href="user_index.php"><p>Users</p></a>
             </div>
             <div class="stat">
                 <h3><?php echo $tasks_count; ?></h3>
@@ -85,10 +86,14 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             </div>
         </div>
         <div class="recent-activities">
-            <h3>Recent Activities</h3>
+            <h3>Recent User Activities</h3>
             <ul>
                 <?php foreach ($recent_activities as $activity) : ?>
-                    <li><?php echo $activity['description']; ?> - <?php echo $activity['created_at']; ?></li>
+                    <li>
+                        <p><strong>User:</strong> <?php echo $activity['username']; ?></p>
+                        <p><strong>Activity:</strong> <?php echo $activity['activity']; ?></p>
+                        <p><strong>Date:</strong> <?php echo $activity['created_at']; ?></p>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         </div>

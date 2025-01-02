@@ -14,10 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
     $priority = $_POST['priority'];
     $status = $_POST['status'];
+    $due_date = $_POST['due_date'];
 
-    $sql = "UPDATE tasks SET title = '$title', description = '$description', priority = '$priority', status = '$status' WHERE id = $id";
+    $sql = "UPDATE tasks SET title = '$title', description = '$description', priority = '$priority', status = '$status', due_date = '$due_date' WHERE id = $id";
 
     if (mysqli_query($conn, $sql)) {
+        // Log the edit task action
+        $activity = "Edited a task: $title";
+        $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
+        mysqli_query($conn, $sql_activity);
+
         header("Location: Dashboard.php");
         exit();
     } else {
@@ -57,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="In Progress" <?php if ($task['status'] == 'In Progress') echo 'selected'; ?>>In Progress</option>
                     <option value="Completed" <?php if ($task['status'] == 'Completed') echo 'selected'; ?>>Completed</option>
                 </select>
+                <input type="date" name="due_date" value="<?php echo $task['due_date']; ?>" required>
                 <input type="submit" value="Update Task">
             </form>
         </section>

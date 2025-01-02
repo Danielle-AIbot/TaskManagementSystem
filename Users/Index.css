@@ -82,54 +82,89 @@ body {
 .stat p {
     margin: 0;
     color: #666;
-    text-decoration: none;
 }
 
-.recent-activities {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.recent-activities h3 {
-    margin-top: 0;
-}
-
-.recent-activities ul {
+.tasks ul {
     list-style-type: none;
     padding: 0;
 }
 
-.recent-activities li {
-    margin-bottom: 10px;
-    color: #666;
-}
-
-.admin,
-.user {
-    margin-left: 220px;
-    /* Adjust margin to account for the fixed menu bar */
-    padding: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
+.tasks li {
+    background-color: #fff;
+    padding: 10px;
     border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-th {
-    background-color: #f2f2f2;
+.tasks li h3 {
+    margin: 0 0 10px 0;
 }
 
-.action-icon {
-    margin-right: 5px;
-    /* Add spacing between icon and text */
+.tasks li p {
+    margin: 5px 0;
+}
+
+.tasks li a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.tasks li a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
