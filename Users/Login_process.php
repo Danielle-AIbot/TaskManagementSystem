@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
         mysqli_query($conn, $sql_activity);
 
-        header("Location: dashboard copy.php");
+        header("Location: dashboard.php");
         exit();
     } else {
         echo "Invalid username or password.";

@@ -125,6 +125,7 @@ body {
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 .btn:hover {
@@ -167,4 +168,30 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.task-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.task-container h3 {
+    margin-top: 0;
+}
+
+.task-container p {
+    margin: 5px 0;
+}
+
+.task-container a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.task-container a:hover {
+    text-decoration: underline;
 }

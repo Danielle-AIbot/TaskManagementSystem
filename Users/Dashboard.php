@@ -2,23 +2,38 @@
 include 'db.php';
 session_start();
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
-$sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id";
-$result_tasks = mysqli_query($conn, $sql_tasks);
-$tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
-
 // Fetch the logged-in user's username and profile picture
+$user_id = $_SESSION['user_id'];
 $sql_user = "SELECT username, profpicture FROM user WHERE id = $user_id";
 $result_user = mysqli_query($conn, $sql_user);
 $user = mysqli_fetch_assoc($result_user);
 
 // Set the account image from the profile picture provided by the user
 $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
+
+// Fetch statistics
+$sql_pending_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'pending'";
+$result_pending_tasks_count = mysqli_query($conn, $sql_pending_tasks_count);
+$pending_tasks_count = mysqli_fetch_assoc($result_pending_tasks_count)['count'];
+
+$sql_in_progress_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'in_progress'";
+$result_in_progress_tasks_count = mysqli_query($conn, $sql_in_progress_tasks_count);
+$in_progress_tasks_count = mysqli_fetch_assoc($result_in_progress_tasks_count)['count'];
+
+$sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'completed'";
+$result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
+$completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
+
+// Fetch tasks that are due within the next 3 days, exclude completed tasks, and arrange by priority
+$sql_tasks_due_soon = "SELECT * FROM tasks WHERE user_id = $user_id AND due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND status != 'completed' ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+$result_tasks_due_soon = mysqli_query($conn, $sql_tasks_due_soon);
+$tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -37,20 +52,36 @@ $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.
             <div class="username"><?php echo $user['username']; ?></div>
         </div>
         <ul>
-            <li><a href="dashboard copy.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="Dashboard.php"><i class="fas fa-users"></i> Tasks</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
             <li><a href="Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
     <div class="dashboard">
         <h2>Welcome, <?php echo $user['username']; ?>!</h2>
-        <button id="add-task-btn" class="btn">Add Task</button>
+        <div class="stats">
+            <div class="stat">
+                <h3><?php echo $pending_tasks_count; ?></h3>
+                <p>Pending Tasks</p><br>
+                <a href="pending_tasks.php" class="btn">Show Pending Tasks</a>
+            </div>
+            <div class="stat">
+                <h3><?php echo $in_progress_tasks_count; ?></h3>
+                <p>In Progress Tasks</p><br>
+                <a href="in_progress_tasks.php" class="btn">Show In Progress Tasks</a>
+            </div>
+            <div class="stat">
+                <h3><?php echo $completed_tasks_count; ?></h3>
+                <p>Completed Tasks</p><br>
+                <a href="completed_tasks.php" class="btn">Show Completed Tasks</a>
+            </div>
+        </div>
 
         <section class="tasks">
-            <h2>My Tasks</h2>
+            <h2>Tasks Due Soon</h2>
             <ul>
-                <?php foreach ($tasks as $task) : ?>
+                <?php foreach ($tasks_due_soon as $task) : ?>
                     <li>
                         <h3><?php echo $task['title']; ?></h3>
                         <p><?php echo $task['description']; ?></p>
@@ -64,28 +95,6 @@ $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.
             </ul>
         </section>
     </div>
-
-    <!-- Modal for Add Task -->
-    <div id="add-task-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add Task</h2>
-            <form action="add_task.php" method="post">
-                <input type="text" name="title" placeholder="Task Title" required>
-                <textarea name="description" placeholder="Task Description" required></textarea>
-                <select name="priority" required>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-                <input type="date" name="due_date" required>
-                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                <input type="submit" value="Add Task">
-            </form>
-        </div>
-    </div>
-
-    <script src="modal.js"></script>
 </body>
 
 </html>

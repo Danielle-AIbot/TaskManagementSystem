@@ -74,7 +74,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
         <div class="stats">
             <div class="stat">
                 <h3><?php echo $users_count; ?></h3>
-                <a href="user_index.php"><p>Users</p></a>
+                <p>Users</p>
             </div>
             <div class="stat">
                 <h3><?php echo $tasks_count; ?></h3>

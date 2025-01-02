@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $admin_id = mysqli_insert_id($conn);
         // Store the admin's ID in the session
         $_SESSION['admin_id'] = $admin_id;
-        header("Location: Admin_index.php");
+        header("Location: dashboard.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
