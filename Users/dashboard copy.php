@@ -30,8 +30,8 @@ $sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id 
 $result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
 $completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
 
-// Fetch tasks that are due in the next 3 days until the due date and are not completed
-$sql_tasks_due_soon = "SELECT * FROM tasks WHERE user_id = $user_id AND due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND status != 'completed'";
+// Fetch tasks that are due from 3 days until the due date and are not completed
+$sql_tasks_due_soon = "SELECT * FROM tasks WHERE user_id = $user_id AND due_date > DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND status != 'completed'";
 $result_tasks_due_soon = mysqli_query($conn, $sql_tasks_due_soon);
 $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
 ?>
