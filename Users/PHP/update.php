@@ -13,7 +13,7 @@ $task = mysqli_fetch_assoc($result);
 <head>
     <meta charset="UTF-8">
     <title>Edit Task</title>
-    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="../CSS/Style.css">
 </head>
 
 <body>
