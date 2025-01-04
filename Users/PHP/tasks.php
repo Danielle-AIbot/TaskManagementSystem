@@ -15,7 +15,7 @@ $result_user = mysqli_query($conn, $sql_user);
 $user = mysqli_fetch_assoc($result_user);
 
 // Set the account image from the profile picture provided by the user
-$account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
+$account_image = !empty($user['profpicture']) ? $user['profpicture'] : '../../admins/pics/account.jpg'; // Default image if no profile picture is provided
 
 // Handle search query
 $search_query = "";
@@ -35,13 +35,13 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../CSS/Index.css">
 </head>
 
 <body>
     <div class="menubar">
         <div class="account">
-            <img src="Uploads/<?php echo $account_image; ?>" alt="Account Image">
+            <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
         </div>
         <ul>
@@ -97,7 +97,7 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
         </div>
     </div>
 
-    <script src="modal.js"></script>
+    <script src="../JS/modal.js"></script>
 </body>
 
 </html>

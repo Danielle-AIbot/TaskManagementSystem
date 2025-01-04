@@ -13,7 +13,7 @@ $admin = mysqli_fetch_assoc($result); // Fetch the admin data
 <head>
     <meta charset="UTF-8">
     <title>Edit Admin</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../CSS/system.css">
 </head>
 
 <body>

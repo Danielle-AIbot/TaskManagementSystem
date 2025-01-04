@@ -17,10 +17,10 @@ $user = mysqli_fetch_assoc($result_user);
 // Set the account image from the profile picture provided by the user
 $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
 
-// Fetch pending tasks and arrange them by priority
-$sql_pending_tasks = "SELECT * FROM tasks WHERE user_id = $user_id AND status = 'pending' ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
-$result_pending_tasks = mysqli_query($conn, $sql_pending_tasks);
-$pending_tasks = mysqli_fetch_all($result_pending_tasks, MYSQLI_ASSOC);
+// Fetch in-progress tasks and arrange them by priority
+$sql_in_progress_tasks = "SELECT * FROM tasks WHERE user_id = $user_id AND status = 'in_progress' ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+$result_in_progress_tasks = mysqli_query($conn, $sql_in_progress_tasks);
+$in_progress_tasks = mysqli_fetch_all($result_in_progress_tasks, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -28,14 +28,14 @@ $pending_tasks = mysqli_fetch_all($result_pending_tasks, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>Pending Tasks</title>
-    <link rel="stylesheet" href="index.css">
+    <title>In Progress Tasks</title>
+    <link rel="stylesheet" href="../CSS/Index.css">
 </head>
 
 <body>
     <div class="menubar">
         <div class="account">
-            <img src="Uploads/<?php echo $account_image; ?>" alt="Account Image">
+            <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
         </div>
         <ul>
@@ -46,9 +46,9 @@ $pending_tasks = mysqli_fetch_all($result_pending_tasks, MYSQLI_ASSOC);
     </div>
 
     <div class="dashboard">
-        <h2>Pending Tasks</h2>
+        <h2>In Progress Tasks</h2>
         <ul>
-            <?php foreach ($pending_tasks as $task) : ?>
+            <?php foreach ($in_progress_tasks as $task) : ?>
                 <li class="task-container">
                     <h3><?php echo $task['title']; ?></h3>
                     <p><?php echo $task['description']; ?></p>

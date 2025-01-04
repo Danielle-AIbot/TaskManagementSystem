@@ -42,13 +42,13 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../CSS/Index.css">
 </head>
 
 <body>
     <div class="menubar">
         <div class="account">
-            <img src="Uploads/<?php echo $account_image; ?>" alt="Account Image">
+            <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
         </div>
         <ul>

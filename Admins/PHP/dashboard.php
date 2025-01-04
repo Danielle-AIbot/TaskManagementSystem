@@ -15,13 +15,13 @@ $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
 // Set the account image based on the username
-$account_image = 'account.jpg'; // Default image
+$account_image = '../pics/account.jpg'; // Default image
 if ($admin['username'] == 'Danielle Mae') {
-    $account_image = 'dani.jpg';
+    $account_image = '../pics/dani.jpg';
 } elseif ($admin['username'] == 'Abegail') {
-    $account_image = 'abby.jpg';
+    $account_image = '../pics/abby.jpg';
 } elseif ($admin['username'] == 'Maria Luzviminda') {
-    $account_image = 'Luzvie.jpg';
+    $account_image = '../pics/Luzvie.jpg';
 }
 
 // Fetch statistics
@@ -50,7 +50,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="Index.css">
+    <link rel="stylesheet" href="../CSS/Index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
