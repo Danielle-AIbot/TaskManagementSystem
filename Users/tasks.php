@@ -2,23 +2,31 @@
 include 'db.php';
 session_start();
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
-$sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id";
-$result_tasks = mysqli_query($conn, $sql_tasks);
-$tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
-
 // Fetch the logged-in user's username and profile picture
+$user_id = $_SESSION['user_id'];
 $sql_user = "SELECT username, profpicture FROM user WHERE id = $user_id";
 $result_user = mysqli_query($conn, $sql_user);
 $user = mysqli_fetch_assoc($result_user);
 
 // Set the account image from the profile picture provided by the user
 $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
+
+// Handle search query
+$search_query = "";
+if (isset($_GET['search'])) {
+    $search_query = mysqli_real_escape_string($conn, $_GET['search']);
+    $sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id AND (title LIKE '%$search_query%' OR description LIKE '%$search_query%') ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+} else {
+    $sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+}
+$result_tasks = mysqli_query($conn, $sql_tasks);
+$tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +34,7 @@ $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Tasks</title>
     <link rel="stylesheet" href="index.css">
 </head>
 
@@ -44,25 +52,29 @@ $account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.
     </div>
 
     <div class="dashboard">
-        <h2>Welcome, <?php echo $user['username']; ?>!</h2>
+        <h2>My Tasks</h2>
+        <form method="get" action="tasks.php">
+            <input type="text" name="search" placeholder="Search tasks..." value="<?php echo htmlspecialchars($search_query); ?>">
+            <input type="submit" value="Search">
+        </form>
         <button id="add-task-btn" class="btn">Add Task</button>
-
-        <section class="tasks">
-            <h2>My Tasks</h2>
-            <ul>
-                <?php foreach ($tasks as $task) : ?>
-                    <li>
+        <div class="tasks">
+            <?php foreach ($tasks as $task) : ?>
+                <div class="task-item">
+                    <div class="task-info">
                         <h3><?php echo $task['title']; ?></h3>
                         <p><?php echo $task['description']; ?></p>
                         <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                         <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
-                        <a href="edit_task.php?id=<?php echo $task['id']; ?>">Edit</a>
-                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </section>
+                    </div>
+                    <div class="task-actions">
+                        <a href="edit_task.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
+                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <!-- Modal for Add Task -->
