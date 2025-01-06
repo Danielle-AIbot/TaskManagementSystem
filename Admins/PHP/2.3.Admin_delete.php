@@ -1,12 +1,11 @@
 <?php
-include 'db.php';
+include '../../db.php';
 
 $id = $_GET['id'];
 $sql = "DELETE FROM admin WHERE id = $id";
-$sql = "DELETE FROM user WHERE id = $id";
 
 if (mysqli_query($conn, $sql)) {
-    header("Location: Admin_index.php");
+    header("Location: 2.0.Admin_index.php");
     exit();
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($conn);

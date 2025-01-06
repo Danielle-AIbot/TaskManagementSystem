@@ -1,6 +1,6 @@
 <?php
 
-include 'db.php';
+include '../../db.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $admin_id = mysqli_insert_id($conn);
         // Store the admin's ID in the session
         $_SESSION['admin_id'] = $admin_id;
-        header("Location: dashboard.php");
+        header("Location: 1.0.Dashboard.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);

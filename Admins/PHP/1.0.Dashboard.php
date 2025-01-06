@@ -1,10 +1,10 @@
 <?php
-include 'db.php';
+include '../../db.php';
 session_start();
 
 // Check if the admin is logged in
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
+    header("Location: Error.php");
     exit();
 }
 
@@ -62,10 +62,10 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
-            <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
-            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="1.0.Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="2.0.Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
+            <li><a href="3.0.User_index.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="4.0.Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 

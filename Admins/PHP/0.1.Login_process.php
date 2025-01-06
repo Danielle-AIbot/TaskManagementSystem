@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include '../../db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Password is correct, start a session and redirect to the admin dashboard
         session_start();
         $_SESSION['admin_id'] = $user['id'];
-        header("Location: dashboard.php");
+        header("Location: 1.0.Dashboard.php");
         exit();
     } else {
         // Invalid credentials

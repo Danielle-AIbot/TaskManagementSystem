@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include '../../db.php';
 
 $id = $_GET['id']; // Get the admin ID from the URL
 $sql = "SELECT * FROM admin WHERE id = $id";
