@@ -20,14 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_query($conn, $sql)) {
         // Log the edit task action
-        session_start();
-        $user_id = $_SESSION['user_id'];
-        $username = $_SESSION['username'];
         $activity = "Edited a task: $title";
         $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
         mysqli_query($conn, $sql_activity);
 
-        header("Location: 1.0.Dashboard.php");
+        header("Location: Dashboard.php");
         exit();
     } else {
         echo "Error updating record: " . mysqli_error($conn);
@@ -41,7 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Edit Task</title>
-    <link rel="stylesheet" href="../CSS/Style.css">
+    <<<<<<< HEAD
+        <link rel="stylesheet" href="../CSS/form.css">
+        =======
+        <link rel="stylesheet" href="../CSS/Style.css">
+        >>>>>>> dc123ce11f6ba53ec0288321c4021f7a152a10a4
 </head>
 
 <body>
@@ -52,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <section class="edit-task">
             <h2>Edit Task</h2>
-            <form action="2.1.edit_task.php" method="post">
+            <form action="edit_task.php" method="post">
                 <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
-                <input type="text" name="title" value="<?php echo htmlspecialchars($task['title']); ?>" required>
-                <textarea name="description" required><?php echo htmlspecialchars($task['description']); ?></textarea>
+                <input type="text" name="title" value="<?php echo $task['title']; ?>" required>
+                <textarea name="description" required><?php echo $task['description']; ?></textarea>
                 <select name="priority" required>
                     <option value="Low" <?php if ($task['priority'] == 'Low') echo 'selected'; ?>>Low</option>
                     <option value="Medium" <?php if ($task['priority'] == 'Medium') echo 'selected'; ?>>Medium</option>

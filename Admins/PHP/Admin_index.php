@@ -70,8 +70,8 @@ $admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
                         <td><?php echo $admin['id']; ?></td>
                         <td><?php echo $admin['username']; ?></td>
                         <td>
-                            <a href="update.php?id=<?php echo $admin['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
-                            <a href="delete.php?id=<?php echo $admin['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
+                            <a href="admin_update.php?id=<?php echo $admin['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
+                            <a href="admin_delete.php?id=<?php echo $admin['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

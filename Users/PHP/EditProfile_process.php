@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Update session variable
             $_SESSION['profpicture'] = $profile_image;
 
-            header("Location: ../PHP/1.0.Dashboard.php");
+            header("Location: Dashboard.php");
             exit();
         } else {
             echo "Error updating profile picture: " . mysqli_error($conn);

@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
 
-            header("Location: 1.0.Dashboard.php");
+            header("Location: Dashboard.php");
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);

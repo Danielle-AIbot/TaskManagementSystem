@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Error.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -28,7 +28,7 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>Completed Tasks</title>
+    <title>In Progress Tasks</title>
     <link rel="stylesheet" href="../CSS/Index.css">
 </head>
 
@@ -37,12 +37,11 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
         <div class="account">
             <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
-            <a href="../HTML/EditProfile.html" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
-            <li><a href="1.0.Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="2.0.Tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
-            <li><a href="3.0.Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
+            <li><a href="Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -56,8 +55,8 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
                     <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                     <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                     <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
-                    <a href="2.1.edit_task.php">Edit</a>
-                    <a href="2.2.delete_task.php" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                    <a href="edit_task.php?id=<?php echo $task['id']; ?>">Edit</a>
+                    <a href="delete_task.php?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                 </li>
             <?php endforeach; ?>
         </ul>

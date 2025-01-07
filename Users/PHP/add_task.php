@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
         mysqli_query($conn, $sql_activity);
 
-        header("Location: 1.0.Dashboard.php");
+        header("Location: Dashboard.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
