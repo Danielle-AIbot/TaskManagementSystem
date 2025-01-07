@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Password is correct, start a session and redirect to the admin dashboard
         session_start();
         $_SESSION['admin_id'] = $user['id'];
-        header("Location: 1.0.Dashboard.php");
+        header("Location: dashboard.php");
         exit();
     } else {
         // Invalid credentials

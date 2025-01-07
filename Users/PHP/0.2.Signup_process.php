@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include '../../db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
 
-            header("Location: Dashboard.php");
+            header("Location: 1.0.Dashboard.php");
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);

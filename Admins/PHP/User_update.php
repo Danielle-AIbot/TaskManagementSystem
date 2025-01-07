@@ -13,7 +13,7 @@ $user = mysqli_fetch_assoc($result); // Fetch the user data
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
-    <link rel="stylesheet" href="../CSS/system.css">
+    <link rel="stylesheet" href="../CSS/Form.css">
 </head>
 
 <body>

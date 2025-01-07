@@ -5,7 +5,7 @@ $id = $_GET['id'];
 $sql = "DELETE FROM user WHERE id = $id";
 
 if (mysqli_query($conn, $sql)) {
-    header("Location: 3.0.User_index.php");
+    header("Location: Admin_index.php");
     exit();
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($conn);

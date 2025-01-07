@@ -1,10 +1,10 @@
 <?php
-include 'db.php';
+include '../../db.php';
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: Error.php");
     exit();
 }
 
@@ -50,11 +50,12 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
         <div class="account">
             <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
+            <a href="../HTML/EditProfile.html" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
-            <li><a href="Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="1.0.Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="2.0.Tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
+            <li><a href="3.0.Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -64,17 +65,17 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
             <div class="stat">
                 <h3><?php echo $pending_tasks_count; ?></h3>
                 <p>Pending Tasks</p><br>
-                <a href="pending_tasks.php" class="btn">Show Pending Tasks</a>
+                <a href="1.1.pending_tasks.php" class="btn">Show Pending Tasks</a>
             </div>
             <div class="stat">
                 <h3><?php echo $in_progress_tasks_count; ?></h3>
                 <p>In Progress Tasks</p><br>
-                <a href="in_progress_tasks.php" class="btn">Show In Progress Tasks</a>
+                <a href="1.2.in_progress_tasks.php" class="btn">Show In Progress Tasks</a>
             </div>
             <div class="stat">
                 <h3><?php echo $completed_tasks_count; ?></h3>
                 <p>Completed Tasks</p><br>
-                <a href="completed_tasks.php" class="btn">Show Completed Tasks</a>
+                <a href="1.3.completed_tasks.php" class="btn">Show Completed Tasks</a>
             </div>
         </div>
 
@@ -88,8 +89,8 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
                         <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                         <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
-                        <a href="edit_task.php?id=<?php echo $task['id']; ?>">Edit</a>
-                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="2.1.edit_task.php">Edit</a>
+                        <a href="2.2.delete_task.php?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </li>
                 <?php endforeach; ?>
             </ul>

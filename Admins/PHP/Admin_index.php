@@ -4,7 +4,7 @@ session_start();
 
 // Check if the admin is logged in
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: Error.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -24,10 +24,10 @@ if ($admin['username'] == 'Danielle Mae') {
     $account_image = '../pics/Luzvie.jpg';
 }
 
-// Fetch all users from the database
-$sql_users = "SELECT * FROM user";
-$result_users = mysqli_query($conn, $sql_users);
-$users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
+// Fetch all admins from the database
+$sql_admins = "SELECT * FROM admin";
+$result_admins = mysqli_query($conn, $sql_admins);
+$admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="../CSS/Index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -48,41 +48,36 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
-            <li><a href="1. dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="2. Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
-            <li><a href="3. User_index.php"><i class="fas fa-users"></i> Users</a></li>
-            <li><a href="4. logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
+            <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
-    <div class="user">
-        <h2>Users List</h2>
+    <div class="admin">
+        <h2>Admins List</h2>
+
         <table border="1" cellpadding="10" cellspacing="0">
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Profile Image</th>
                 <th>Action</th>
             </tr>
-            <?php if (!empty($users)) : ?>
-                <?php foreach ($users as $user) : ?>
+            <?php if (!empty($admins)) : ?>
+                <?php foreach ($admins as $admin) : ?>
                     <tr>
-                        <td><?php echo $user['id']; ?></td>
-                        <td><?php echo $user['username']; ?></td>
-                        <td><?php echo $user['email']; ?></td>
+                        <td><?php echo $admin['id']; ?></td>
+                        <td><?php echo $admin['username']; ?></td>
                         <td>
-                            <img src="../../Users/Uploads/<?php echo $user['profpicture']; ?>" width="100">
-                        </td>
-                        <td>
-                            <a href="update_user.php?id=<?php echo $user['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
-                            <a href="delete.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
+                            <a href="update.php?id=<?php echo $admin['id']; ?>"><i class="fas fa-edit action-icon"></i> Edit</a> |
+                            <a href="delete.php?id=<?php echo $admin['id']; ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt action-icon"></i> Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan="5">No users found.</td>
+                    <td colspan="3">No admin found.</td>
                 </tr>
             <?php endif; ?>
         </table>

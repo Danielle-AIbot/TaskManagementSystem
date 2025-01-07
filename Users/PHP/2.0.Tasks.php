@@ -1,10 +1,10 @@
 <?php
-include 'db.php';
+include '../../db.php';
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: Error.php");
     exit();
 }
 
@@ -43,11 +43,12 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
         <div class="account">
             <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
+            <a href="../HTML/EditProfile.html" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
-            <li><a href="Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="1.0.Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="2.0.Tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
+            <li><a href="3.0.Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -69,8 +70,8 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
                     </div>
                     <div class="task-actions">
-                        <a href="edit_task.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
-                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="2.1.edit_task.php" class="btn">Edit</a>
+                        <a href="2.2.delete_task.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -82,7 +83,7 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add Task</h2>
-            <form action="add_task.php" method="post">
+            <form action="2.3.add_task.php" method="post">
                 <input type="text" name="title" placeholder="Task Title" required>
                 <textarea name="description" placeholder="Task Description" required></textarea>
                 <select name="priority" required>

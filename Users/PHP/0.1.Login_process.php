@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include '../../db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
         mysqli_query($conn, $sql_activity);
 
-        header("Location: dashboard.php");
+        header("Location: 1.0.Dashboard.php");
         exit();
     } else {
         echo "Invalid username or password.";

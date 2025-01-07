@@ -6,13 +6,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Update query
-    $sql = "UPDATE admin SET username='$username', password='$password' WHERE id=$id";
+    $sql = "UPDATE user SET username = '$username', password = '$password' WHERE id = $id";
 
     if (mysqli_query($conn, $sql)) {
-        header("Location: 2. Admin_index.php");
+        header("Location: User_index.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        echo "Error updating record: " . mysqli_error($conn);
     }
 }
