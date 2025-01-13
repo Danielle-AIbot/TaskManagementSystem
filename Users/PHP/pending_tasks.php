@@ -37,6 +37,7 @@ $pending_tasks = mysqli_fetch_all($result_pending_tasks, MYSQLI_ASSOC);
         <div class="account">
             <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
+            <a href="../HTML/EditProfile.html" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>

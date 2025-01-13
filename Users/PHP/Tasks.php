@@ -70,35 +70,34 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
                     </div>
                     <div class="task-actions">
-                        <a href="edit_task.php" class="btn">Edit</a>
-                        <a href="delete_task.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="edit_task.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
+                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </div>
+                <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
         </div>
-    </div>
 
-    <!-- Modal for Add Task -->
-    <div id="add-task-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add Task</h2>
-            <form action="add_task.php" method="post">
-                <input type="text" name="title" placeholder="Task Title" required>
-                <textarea name="description" placeholder="Task Description" required></textarea>
-                <select name="priority" required>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-                <input type="date" name="due_date" required>
-                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                <input type="submit" value="Add Task">
-            </form>
+        <!-- Modal for Add Task -->
+        <div id="add-task-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Task</h2>
+                <form action="add_task.php" method="post">
+                    <input type="text" name="title" placeholder="Task Title" required>
+                    <textarea name="description" placeholder="Task Description" required></textarea>
+                    <select name="priority" required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    <input type="date" name="due_date" required>
+                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                    <input type="submit" value="Add Task">
+                </form>
+            </div>
         </div>
-    </div>
 
-    <script src="../JS/modal.js"></script>
+        <script src="../JS/modal.js"></script>
 </body>
 
 </html>
