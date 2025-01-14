@@ -82,7 +82,7 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Add Task</h2>
-                <form action="add_task.php" method="post">
+                <form action="add_task_tasks.php" method="post">
                     <input type="text" name="title" placeholder="Task Title" required>
                     <textarea name="description" placeholder="Task Description" required></textarea>
                     <select name="priority" required>

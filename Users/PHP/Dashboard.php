@@ -15,14 +15,14 @@ $result_user = mysqli_query($conn, $sql_user);
 $user = mysqli_fetch_assoc($result_user);
 
 // Set the account image from the profile picture provided by the user
-$account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
+$account_image = !empty($user['profpicture']) ? $user['profpicture'] : '../../admins/pics/account.jpg'; // Default image if no profile picture is provided
 
 // Fetch statistics
 $sql_pending_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'pending'";
 $result_pending_tasks_count = mysqli_query($conn, $sql_pending_tasks_count);
 $pending_tasks_count = mysqli_fetch_assoc($result_pending_tasks_count)['count'];
 
-$sql_in_progress_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'in_progress'";
+$sql_in_progress_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE user_id = $user_id AND status = 'in progress'";
 $result_in_progress_tasks_count = mysqli_query($conn, $sql_in_progress_tasks_count);
 $in_progress_tasks_count = mysqli_fetch_assoc($result_in_progress_tasks_count)['count'];
 
@@ -89,8 +89,8 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
                         <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                         <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
-                        <a href="edit_task.php">Edit</a>
-                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="edit_task.php?id=<?php echo $task['id']; ?>">Edit</a>
+                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </li>
                 <?php endforeach; ?>
             </ul>
