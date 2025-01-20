@@ -15,7 +15,6 @@ $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
 // Set the account image based on the username
-$account_image = '../pics/account.jpg'; // Default image
 if ($admin['username'] == 'Danielle Mae') {
     $account_image = '../pics/dani.jpg';
 } elseif ($admin['username'] == 'Abegail') {
