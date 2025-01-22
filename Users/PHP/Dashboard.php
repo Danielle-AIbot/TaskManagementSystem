@@ -85,7 +85,7 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
                 <?php foreach ($tasks_due_soon as $task) : ?>
                     <li>
                         <h3><?php echo $task['title']; ?></h3>
-                        <p><?php echo $task['description']; ?></p>
+                        <p><?php echo $task['description']; ?></p> 
                         <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                         <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
