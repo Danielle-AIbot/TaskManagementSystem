@@ -70,8 +70,8 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
                     </div>
                     <div class="task-actions">
-                        <a href="edit_task.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
-                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="edit_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
+                        <a href="delete_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </div>
                 <?php endforeach; ?>
                 </div>

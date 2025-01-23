@@ -42,10 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <header>
-        <h1>Edit Task</h1>
-    </header>
-
     <main>
         <section class="edit-task">
             <h2>Edit Task</h2>

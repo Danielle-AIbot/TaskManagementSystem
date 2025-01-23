@@ -42,14 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <header>
-        <h1>Edit Task</h1>
-    </header>
-
     <main>
         <section class="edit-task">
             <h2>Edit Task</h2>
-            <form action="edit_task.php" method="post">
+            <form action="edit_task_tasks.php" method="post">
                 <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
                 <input type="text" name="title" value="<?php echo $task['title']; ?>" required>
                 <textarea name="description" required><?php echo $task['description']; ?></textarea>
