@@ -1,4 +1,5 @@
 <?php
+// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/Admin_index.php
 include '../../db.php';
 session_start();
 
@@ -8,21 +9,14 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Fetch the logged-in admin's username
+// Fetch the logged-in admin's username and profile picture
 $admin_id = $_SESSION['admin_id'];
-$sql_admin = "SELECT username FROM admin WHERE id = $admin_id";
+$sql_admin = "SELECT username, pic FROM admin WHERE id = $admin_id";
 $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
-// Set the account image based on the username
-$account_image = '../pics/account.jpg'; // Default image
-if ($admin['username'] == 'Danielle Mae') {
-    $account_image = '../pics/dani.jpg';
-} elseif ($admin['username'] == 'Abegail') {
-    $account_image = '../pics/abby.jpg';
-} elseif ($admin['username'] == 'Maria Luzviminda') {
-    $account_image = '../pics/Luzvie.jpg';
-}
+// Set the account image from the profile picture provided by the user
+$account_image = !empty($admin['pic']) ? $admin['pic'] : 'default.jpg'; // Default image if no profile picture is provided
 
 // Fetch all admins from the database
 $sql_admins = "SELECT * FROM admin";
@@ -44,7 +38,7 @@ $admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
 
     <div class="menubar">
         <div class="account">
-            <img src="<?php echo $account_image; ?>" alt="Account Image">
+            <img src="../../Profile/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>
@@ -55,13 +49,12 @@ $admins = mysqli_fetch_all($result_admins, MYSQLI_ASSOC);
         </ul>
     </div>
 
-    <div class="admin">
-        <h2>Admins List</h2>
-
-        <table border="1" cellpadding="10" cellspacing="0">
+    <div class="dashboard">
+        <h2>Admin List</h2>
+        <table>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Username</th>
                 <th>Action</th>
             </tr>
             <?php if (!empty($admins)) : ?>

@@ -15,16 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $priority = $_POST['priority'];
     $due_date = $_POST['due_date'];
     $user_id = $_POST['user_id'];
+    $admin_id = $_SESSION['admin_id'];
 
     // Prepare the SQL statement with placeholders
-    $stmt = $conn->prepare("INSERT INTO tasks (title, description, priority, status, due_date, user_id, created_at, updated_at) VALUES (?, ?, ?, 'new_task', ?, ?, NOW(), NOW())");
+    $stmt = $conn->prepare("INSERT INTO tasks (title, description, priority, status, due_date, user_id, assigned_by, created_at, updated_at) VALUES (?, ?, ?, 'new', ?, ?, ?, NOW(), NOW())");
 
     // Bind the parameters to the SQL query
-    $stmt->bind_param("ssssi", $title, $description, $priority, $due_date, $user_id);
+    $stmt->bind_param("ssssii", $title, $description, $priority, $due_date, $user_id, $admin_id);
 
     // Execute the statement
     if ($stmt->execute()) {
-        header("Location: User_index.php");
+        header("Location: tasks.php");
+        exit();
     } else {
         echo "Error: " . $stmt->error;
     }

@@ -19,8 +19,8 @@
             <h2>Get Organized. Get Things Done.</h2>
             <p>AstroTask helps you stay on top of your tasks, boost your productivity, and achieve your goals.</p>
             <div class="buttons">
-                <a href="/2nd_year/task_management_system/Users/HTML/Login.html" class="btn">Login</a>
-                <a href="/2nd_year/task_management_system/Users/HTML/Signup.html" class="btn">Sign Up</a>
+                <a href="/2nd_year/task_management_system/Users/php/Login.php" class="btn">Login</a>
+                <a href="/2nd_year/task_management_system/Users/php/Signup.php" class="btn">Sign Up</a>
             </div>
         </section>
 

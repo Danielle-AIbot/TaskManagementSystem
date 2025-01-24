@@ -1,5 +1,5 @@
 <?php
-// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/dashboard.php
+// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/completed_tasks.php
 include '../../db.php';
 session_start();
 
@@ -15,7 +15,7 @@ $sql_admin = "SELECT username, pic FROM admin WHERE id = $admin_id";
 $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
-// Set the account image from the profile picture provided by the user
+// Set the account image from the profile picture provided by the admin
 $account_image = !empty($admin['pic']) ? $admin['pic'] : 'default.jpg'; // Default image if no profile picture is provided
 
 // Fetch statistics
@@ -31,10 +31,10 @@ $sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status =
 $result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
 $completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
 
-// Fetch recent activities of all users
-$sql_recent_activities = "SELECT username, activity, created_at FROM activities ORDER BY created_at DESC LIMIT 10";
-$result_recent_activities = mysqli_query($conn, $sql_recent_activities);
-$recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
+// Fetch completed tasks by the users
+$sql_completed_tasks = "SELECT t.*, u.username AS assigned_to FROM tasks t JOIN user u ON t.user_id = u.id WHERE t.status = 'completed' ORDER BY FIELD(t.priority, 'High', 'Medium', 'Low')";
+$result_completed_tasks = mysqli_query($conn, $sql_completed_tasks);
+$completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <title>Completed Tasks</title>
     <link rel="stylesheet" href="../CSS/Index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -62,7 +62,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
     </div>
 
     <div class="dashboard">
-        <h2>Welcome, <?php echo $admin['username']; ?>!</h2>
+        <h2>Completed Tasks</h2>
         <div class="stats">
             <div class="stat">
                 <h3><?php echo $users_count; ?></h3>
@@ -71,7 +71,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             <div class="stat">
                 <h3><?php echo $tasks_count; ?></h3>
                 <p>Tasks</p>
-                <a href="tasks.php" class="btn">Show Tasks</a>
+                <a href="tasks.php" class="btn">Show All Tasks</a>
             </div>
             <div class="stat">
                 <h3><?php echo $completed_tasks_count; ?></h3>
@@ -80,15 +80,22 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             </div>
         </div>
 
-        <section class="recent-activities">
-            <h2>Recent Activities</h2>
+        <section class="tasks">
+            <h2>Completed Tasks</h2>
             <ul>
-                <?php foreach ($recent_activities as $activity) : ?>
+                <?php foreach ($completed_tasks as $task) : ?>
                     <li>
-                        <p>Username<strong><?php echo $activity['username']; ?>:
-                        <p>Activity:</strong> <?php echo $activity['activity']; ?>
-                        <p>Time: <em>(<?php echo $activity['created_at']; ?>)</em>
-                        </p>
+                        <h3><?php echo $task['title']; ?></h3>
+                        <p><?php echo $task['description']; ?></p>
+                        <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
+                        <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
+                        <p><strong>Completed Date:</strong> <?php echo $task['due_date']; ?></p>
+                        <p><strong>Assigned To:</strong> <?php echo $task['assigned_to']; ?></p>
+                        <?php if (!empty($task['completed_image'])) : ?>
+                            <p><img src="../../admins/tasks/<?php echo $task['completed_image']; ?>" alt="Task File" width="100"></p>
+                        <?php else : ?>
+                            <p>No image uploaded for this task.</p>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>

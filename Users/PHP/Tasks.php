@@ -1,10 +1,11 @@
 <?php
+// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Users/PHP/Tasks.php
 include '../../db.php';
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Error.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -15,7 +16,7 @@ $result_user = mysqli_query($conn, $sql_user);
 $user = mysqli_fetch_assoc($result_user);
 
 // Set the account image from the profile picture provided by the user
-$account_image = !empty($user['profpicture']) ? $user['profpicture'] : '../../admins/pics/account.jpg'; // Default image if no profile picture is provided
+$account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
 
 // Handle search query
 $search_query = "";
@@ -58,7 +59,6 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
             <input type="text" name="search" placeholder="Search tasks..." value="<?php echo htmlspecialchars($search_query); ?>">
             <input type="submit" value="Search">
         </form>
-        <button id="add-task-btn" class="btn">Add Task</button>
         <div class="tasks">
             <?php foreach ($tasks as $task) : ?>
                 <div class="task-item">
@@ -71,33 +71,11 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
                     </div>
                     <div class="task-actions">
                         <a href="edit_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
-                        <a href="delete_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                        <a href="delete_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn">Delete</a>
                     </div>
-                <?php endforeach; ?>
                 </div>
+            <?php endforeach; ?>
         </div>
-
-        <!-- Modal for Add Task -->
-        <div id="add-task-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Add Task</h2>
-                <form action="add_task_tasks.php" method="post">
-                    <input type="text" name="title" placeholder="Task Title" required>
-                    <textarea name="description" placeholder="Task Description" required></textarea>
-                    <select name="priority" required>
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
-                    </select>
-                    <input type="date" name="due_date" required>
-                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                    <input type="submit" value="Add Task">
-                </form>
-            </div>
-        </div>
-
-        <script src="../JS/modal.js"></script>
 </body>
 
 </html>

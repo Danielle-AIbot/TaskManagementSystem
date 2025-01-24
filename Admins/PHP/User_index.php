@@ -1,4 +1,5 @@
 <?php
+// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/User_index.php
 include '../../db.php';
 session_start();
 
@@ -8,20 +9,14 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Fetch the logged-in admin's username
+// Fetch the logged-in admin's username and profile picture
 $admin_id = $_SESSION['admin_id'];
-$sql_admin = "SELECT username FROM admin WHERE id = $admin_id";
+$sql_admin = "SELECT username, pic FROM admin WHERE id = $admin_id";
 $result_admin = mysqli_query($conn, $sql_admin);
 $admin = mysqli_fetch_assoc($result_admin);
 
-// Set the account image based on the username
-if ($admin['username'] == 'Danielle Mae') {
-    $account_image = '../pics/dani.jpg';
-} elseif ($admin['username'] == 'Abegail') {
-    $account_image = '../pics/abby.jpg';
-} elseif ($admin['username'] == 'Maria Luzviminda') {
-    $account_image = '../pics/Luzvie.jpg';
-}
+// Set the account image from the profile picture provided by the admin
+$account_image = !empty($admin['pic']) ? $admin['pic'] : 'default.jpg'; // Default image if no profile picture is provided
 
 // Fetch all users from the database
 $sql_users = "SELECT * FROM user";
@@ -34,7 +29,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>User Management</title>
+    <title>Users Management</title>
     <link rel="stylesheet" href="../CSS/Index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -43,7 +38,7 @@ $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
 
     <div class="menubar">
         <div class="account">
-            <img src="<?php echo $account_image; ?>" alt="Account Image">
+            <img src="../../Profile/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
         </div>
         <ul>

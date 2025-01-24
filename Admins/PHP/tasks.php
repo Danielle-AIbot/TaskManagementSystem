@@ -1,5 +1,5 @@
 <?php
-// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/dashboard.php
+// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/tasks.php
 include '../../db.php';
 session_start();
 
@@ -31,10 +31,10 @@ $sql_completed_tasks_count = "SELECT COUNT(*) AS count FROM tasks WHERE status =
 $result_completed_tasks_count = mysqli_query($conn, $sql_completed_tasks_count);
 $completed_tasks_count = mysqli_fetch_assoc($result_completed_tasks_count)['count'];
 
-// Fetch recent activities of all users
-$sql_recent_activities = "SELECT username, activity, created_at FROM activities ORDER BY created_at DESC LIMIT 10";
-$result_recent_activities = mysqli_query($conn, $sql_recent_activities);
-$recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
+// Fetch tasks assigned by the admin
+$sql_tasks_assigned = "SELECT t.*, u.username AS assigned_to FROM tasks t JOIN user u ON t.user_id = u.id WHERE t.assigned_by = $admin_id";
+$result_tasks_assigned = mysqli_query($conn, $sql_tasks_assigned);
+$tasks_assigned = mysqli_fetch_all($result_tasks_assigned, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +48,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
 </head>
 
 <body>
+
     <div class="menubar">
         <div class="account">
             <img src="../../Profile/<?php echo $account_image; ?>" alt="Account Image">
@@ -79,21 +80,23 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
                 <a href="completed_tasks.php" class="btn">Show Completed Tasks</a>
             </div>
         </div>
-
-        <section class="recent-activities">
-            <h2>Recent Activities</h2>
+        <section class="tasks">
+            <h2>Tasks Assigned by You</h2>
             <ul>
-                <?php foreach ($recent_activities as $activity) : ?>
+                <?php foreach ($tasks_assigned as $task) : ?>
                     <li>
-                        <p>Username<strong><?php echo $activity['username']; ?>:
-                        <p>Activity:</strong> <?php echo $activity['activity']; ?>
-                        <p>Time: <em>(<?php echo $activity['created_at']; ?>)</em>
-                        </p>
+                        <h3><?php echo $task['title']; ?></h3>
+                        <p><?php echo $task['description']; ?></p>
+                        <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
+                        <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
+                        <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
+                        <p><strong>Assigned To:</strong> <?php echo $task['assigned_to']; ?></p>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </section>
     </div>
+
 </body>
 
 </html>
