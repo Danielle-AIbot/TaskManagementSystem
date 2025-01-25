@@ -55,8 +55,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
         </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
-            <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="User_index.php"><i class="fas fa-users"></i> Students</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
@@ -66,7 +65,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
         <div class="stats">
             <div class="stat">
                 <h3><?php echo $users_count; ?></h3>
-                <p>Users</p>
+                <p>Students</p>
             </div>
             <div class="stat">
                 <h3><?php echo $tasks_count; ?></h3>
@@ -75,7 +74,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             </div>
             <div class="stat">
                 <h3><?php echo $completed_tasks_count; ?></h3>
-                <p>Completed Tasks</p>
+                <p>Approved Tasks</p>
                 <a href="completed_tasks.php" class="btn">Show Completed Tasks</a>
             </div>
         </div>

@@ -42,7 +42,7 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
-    <title>Completed Tasks</title>
+    <title>Approved Tasks</title>
     <link rel="stylesheet" href="../CSS/Index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -55,7 +55,6 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
         </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="Admin_index.php"><i class="fas fa-user"></i> Admins</a></li>
             <li><a href="User_index.php"><i class="fas fa-users"></i> Users</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -75,13 +74,13 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
             </div>
             <div class="stat">
                 <h3><?php echo $completed_tasks_count; ?></h3>
-                <p>Completed Tasks</p>
-                <a href="completed_tasks.php" class="btn">Show Completed Tasks</a>
+                <p>Approved Tasks</p>
+                <a href="completed_tasks.php" class="btn">Show Approved Tasks</a>
             </div>
         </div>
 
         <section class="tasks">
-            <h2>Completed Tasks</h2>
+            <h2>Approved Tasks</h2>
             <ul>
                 <?php foreach ($completed_tasks as $task) : ?>
                     <li>
@@ -96,6 +95,7 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
                         <?php else : ?>
                             <p>No image uploaded for this task.</p>
                         <?php endif; ?>
+                        <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </li>
                 <?php endforeach; ?>
             </ul>

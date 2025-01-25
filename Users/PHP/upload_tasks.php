@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_query($conn, $sql)) {
             // Log the task completion action
-            $username = $_SESSION['username'];
+            $username = $_SESSION['user_username'];
             $activity = "Task Successfully Completed";
             $sql_activity = "INSERT INTO activities (user_id, username, activity, created_at) VALUES ($user_id, '$username', '$activity', NOW())";
             mysqli_query($conn, $sql_activity);
