@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <section class="edit-task">
             <h2>Edit Task</h2>
-            <form action="edit_task.php?id=<?php echo $task_id; ?>" method="post" enctype="multipart/form-data">
+            <form action="edit_task_pending.php?id=<?php echo $task_id; ?>" method="post" enctype="multipart/form-data">
                 <input type="text" name="title" value="<?php echo htmlspecialchars($task['title']); ?>" placeholder="Task Title" required>
                 <textarea name="description" placeholder="Task Description" required><?php echo htmlspecialchars($task['description']); ?></textarea>
                 <select name="priority" required>
@@ -105,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="High" <?php if ($task['priority'] == 'High') echo 'selected'; ?>>High</option>
                 </select>
                 <select name="status" required>
+                    <option value="pending" <?php if ($task['status'] == 'pending') echo 'selected'; ?>>Pending</option>
                     <option value="completed" <?php if ($task['status'] == 'completed') echo 'selected'; ?>>Completed</option>
                 </select>
                 <input type="date" name="due_date" value="<?php echo $task['due_date']; ?>" required>

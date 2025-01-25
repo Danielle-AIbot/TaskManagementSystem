@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <main>
-        <section class="assign-task">
+        <section class="container">
             <h2>Assign Task to User</h2>
             <form action="assign_task.php" method="post">
                 <input type="text" name="title" placeholder="Task Title" required>

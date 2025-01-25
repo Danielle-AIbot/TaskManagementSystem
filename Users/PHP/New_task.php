@@ -89,7 +89,7 @@ $new_tasks = mysqli_fetch_all($result_new_tasks, MYSQLI_ASSOC);
                         <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
                         <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
                         <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
-                        <a href="edit_task.php?id=<?php echo $task['id']; ?>">Edit</a>
+                        <a href="edit_task_pending.php?id=<?php echo $task['id']; ?>">Edit</a>
                         <a href="delete_task.php?id=<?php echo $task['id']; ?>" class="btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                     </li>
                 <?php endforeach; ?>
