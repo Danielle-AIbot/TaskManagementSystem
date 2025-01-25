@@ -52,6 +52,7 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
         <div class="account">
             <img src="../../Profile/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
+            <a href="editprofile.php" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -65,7 +66,7 @@ $completed_tasks = mysqli_fetch_all($result_completed_tasks, MYSQLI_ASSOC);
         <div class="stats">
             <div class="stat">
                 <h3><?php echo $users_count; ?></h3>
-                <p>Users</p>
+                <p>Students</p>
             </div>
             <div class="stat">
                 <h3><?php echo $tasks_count; ?></h3>

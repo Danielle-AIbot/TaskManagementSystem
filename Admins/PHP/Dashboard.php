@@ -52,6 +52,7 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
         <div class="account">
             <img src="../../Profile/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $admin['username']; ?></div>
+            <a href="editprofile.php" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -84,9 +85,9 @@ $recent_activities = mysqli_fetch_all($result_recent_activities, MYSQLI_ASSOC);
             <ul>
                 <?php foreach ($recent_activities as $activity) : ?>
                     <li>
-                        <p>Username<strong><?php echo $activity['username']; ?>:
-                        <p>Activity:</strong> <?php echo $activity['activity']; ?>
-                        <p>Time: <em>(<?php echo $activity['created_at']; ?>)</em>
+                        <p>Username:<strong><?php echo $activity['username']; ?>
+                    <p>Activity:</strong> <?php echo $activity['activity']; ?>
+                            <p>Time:<em>(<?php echo $activity['created_at']; ?>)</em>
                         </p>
                     </li>
                 <?php endforeach; ?>

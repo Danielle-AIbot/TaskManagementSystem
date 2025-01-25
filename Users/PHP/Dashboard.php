@@ -50,7 +50,7 @@ $tasks_due_soon = mysqli_fetch_all($result_tasks_due_soon, MYSQLI_ASSOC);
         <div class="account">
             <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
             <div class="username"><?php echo $user['username']; ?></div>
-            <a href="../HTML/EditProfile.html" class="icon-btn"><i class="fas fa-user-edit"></i></a>
+            <a href="EditProfile.php" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
             <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
