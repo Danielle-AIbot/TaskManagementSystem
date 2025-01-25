@@ -2,5 +2,5 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: ../../AstroTask.php");
+header("Location: ../../Index.php");
 exit();
