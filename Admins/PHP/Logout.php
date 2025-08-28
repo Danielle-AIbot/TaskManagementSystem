@@ -1,5 +1,7 @@
 <?php
+
+require_once '../configs/user-process.php';
 session_start();
-session_destroy();
-header("Location: ../../Index.php");
-exit();
+
+$users = new Users();
+$users->Logout();

@@ -1,6 +1,7 @@
 <?php
-// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Users/PHP/Tasks.php
-include '../../db.php';
+// filepath: c:\wamp64\www\2nd_year\Task_Management_System\Users\PHP\tasks.php
+require_once '../../admins/configs/db.php';
+require_once '../../Admins/configs/taskmanager.php';
 session_start();
 
 // Check if the user is logged in
@@ -9,25 +10,28 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch the logged-in user's username and profile picture
-$user_id = $_SESSION['user_id'];
-$sql_user = "SELECT username, profpicture FROM user WHERE id = $user_id";
-$result_user = mysqli_query($conn, $sql_user);
-$user = mysqli_fetch_assoc($result_user);
+$database = new Database();
+$conn = $database->connection();
 
-// Set the account image from the profile picture provided by the user
-$account_image = !empty($user['profpicture']) ? $user['profpicture'] : 'account.jpg'; // Default image if no profile picture is provided
+// Fetch the logged-in user's info
+$user_id = $_SESSION['user_id'];
+$sql_user = "SELECT username, profpic FROM users WHERE id = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->execute([$user_id]);
+$user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+
+$account_image = !empty($user['profpic']) ? $user['profpic'] : 'account.jpg';
 
 // Handle search query
 $search_query = "";
+$taskManager = new TaskManager($conn);
+
 if (isset($_GET['search'])) {
-    $search_query = mysqli_real_escape_string($conn, $_GET['search']);
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id AND (title LIKE '%$search_query%' OR description LIKE '%$search_query%') ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+    $search_query = $_GET['search'];
+    $tasks = $taskManager->getUserTasksBySearch($user_id, $search_query);
 } else {
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = $user_id ORDER BY FIELD(priority, 'High', 'Medium', 'Low')";
+    $tasks = $taskManager->getUserTasks($user_id);
 }
-$result_tasks = mysqli_query($conn, $sql_tasks);
-$tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -36,38 +40,43 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
-    <link rel="stylesheet" href="../CSS/Index.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
     <div class="menubar">
         <div class="account">
-            <img src="../Uploads/<?php echo $account_image; ?>" alt="Account Image">
-            <div class="username"><?php echo $user['username']; ?></div>
-            <a href="EditProfile.php" class="icon-btn"><i class="fas fa-user-edit"></i></a>
+            <img src="../../profile/<?php echo htmlspecialchars($account_image); ?>" alt="Account Image">
+            <div class="username"><?php echo htmlspecialchars($user['username']); ?></div>
+            <a href="editprofile.php" class="icon-btn"><i class="fas fa-user-edit"></i></a>
         </div>
         <ul>
-            <li><a href="Dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="Tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
-            <li><a href="Logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="tasks.php"><i class="fas fa-users"></i> Tasks</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
     <div class="dashboard">
         <h2>My Tasks</h2>
-        <form method="get" action="tasks.php">
-            <input type="text" name="search" placeholder="Search tasks..." value="<?php echo htmlspecialchars($search_query); ?>">
-            <input type="submit" value="Search">
-        </form>
         <div class="tasks">
+            <button>
+                <a href="create_task.php" class="btn">Create New Task</a>
+            </button>
             <?php foreach ($tasks as $task) : ?>
                 <div class="task-item">
                     <div class="task-info">
-                        <h3><?php echo $task['title']; ?></h3>
-                        <p><?php echo $task['description']; ?></p>
-                        <p><strong>Priority:</strong> <?php echo $task['priority']; ?></p>
-                        <p><strong>Status:</strong> <?php echo $task['status']; ?></p>
-                        <p><strong>Due Date:</strong> <?php echo $task['due_date']; ?></p>
+                        <h3><?php echo htmlspecialchars($task['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($task['description']); ?></p>
+                        <p><strong>Priority:</strong> <?php echo htmlspecialchars($task['priority']); ?></p>
+                        <p><strong>Status:</strong> <?php echo htmlspecialchars($task['status']); ?></p>
+                        <p><strong>Due Date:</strong> <?php echo htmlspecialchars($task['due_date']); ?></p>
+                        <p><strong>Assigned By:</strong>
+                            <?php
+                            echo ($task['assigned_by'] == $user_id) ? 'Me' : htmlspecialchars($task['assigned_by_name']);
+                            ?>
+                        </p>
                     </div>
                     <div class="task-actions">
                         <a href="edit_task_tasks.php?id=<?php echo $task['id']; ?>" class="btn">Edit</a>
@@ -76,6 +85,7 @@ $tasks = mysqli_fetch_all($result_tasks, MYSQLI_ASSOC);
                 </div>
             <?php endforeach; ?>
         </div>
+    </div>
 </body>
 
 </html>

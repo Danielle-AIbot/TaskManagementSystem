@@ -1,12 +1,18 @@
 <?php
-include '../../db.php';
+// filepath: c:\wamp64\www\2nd_year\Task_Management_System\Admins\PHP\User_delete.php
+require_once '../configs/crud.php';
 
-$id = $_GET['id'];
-$sql = "DELETE FROM user WHERE id = $id";
+$crud = new crud();
 
-if (mysqli_query($conn, $sql)) {
-    header("Location: User_index.php");
-    exit();
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    if ($crud->D($id)) {
+        header("Location: user_index.php");
+        exit();
+    } else {
+        echo "Error deleting user.";
+    }
 } else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    echo "No user ID specified.";
 }
+?>

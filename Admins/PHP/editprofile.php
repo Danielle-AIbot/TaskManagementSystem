@@ -1,35 +1,35 @@
 <?php
-// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Admins/PHP/editprofile.php
-include '../../db.php';
+require_once '../configs/db.php';
+require_once '../configs/crud.php';
 session_start();
 
-// Check if the user is logged in
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: Error.php");
+    header("Location: ../../index.php");
     exit();
 }
 
+$crud = new crud();
+$user_id = $_SESSION['admin_id'];
+$user = $crud->getUserById($user_id);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $admin_id = $_SESSION['admin_id'];
-    $profile_image = $_FILES['profile_image']['name'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $role = $user['role']; // Don't allow role change here for security
 
-    $target_dir = "../../profile/";
-    $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+    // Handle profile image upload if needed
+    $profile_image = $user['profpic'];
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $target_dir = "../../Profile/";
+        $profile_image = basename($_FILES["image"]["name"]);
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . $profile_image);
+    }
 
-    if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
-        $sql = "UPDATE admin SET pic = '$profile_image' WHERE id = $admin_id";
-
-        if (mysqli_query($conn, $sql)) {
-            // Update session variable
-            $_SESSION['pic'] = $profile_image;
-
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            echo "Error updating profile picture: " . mysqli_error($conn);
-        }
+    if ($crud->U($user_id, $username, $email, $profile_image, $role)) {
+        header("Location: tasks.php");
+        exit();
     } else {
-        echo "Sorry, there was an error uploading your file.";
+        $error = "Error updating profile.";
     }
 }
 ?>
@@ -39,20 +39,150 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="../CSS/form.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: url('../../image.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(6px);
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #a635df;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #a635df;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea,
+        input[type="date"],
+        select {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            width: 100%;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #a635df;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 12px;
+            background: linear-gradient(to right, #ff416c, #a635df);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(to right, #a635df, #ff416c);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input[type="submit"] {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <h2>Edit Profile</h2>
-        <form action="editprofile.php" method="post" enctype="multipart/form-data">
-            <label for="profile_image">New Profile Image:</label>
-            <input type="file" name="profile_image" required>
+        <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+        <form action="" method="post" enctype="multipart/form-data">
+            <?php if (!empty($user['profpic'])): ?>
+                <img src="../../profile/<?php echo htmlspecialchars($user['profpic']); ?>" class='profilepic' width="100" alt="Profile Image">
+            <?php endif; ?>
+            <label>Username:</label>
+            <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+            <label>Email:</label>
+            <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            <label>Profile Image:</label>
+            <input type="file" name="image">
             <input type="submit" value="Update Profile">
         </form>
+        <p><a href="user_index.php">Return</a></p>
     </div>
 </body>
 

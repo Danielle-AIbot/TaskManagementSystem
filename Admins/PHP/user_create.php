@@ -1,44 +1,30 @@
 <?php
 require_once '../configs/db.php';
-require_once '../configs/taskmanager.php';
-require_once '../configs/crud.php';
-session_start();
-
-// Check if the admin is logged in
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: ../../index.php");
-    exit();
-}
-
-$database = new Database();
-$conn = $database->connection();
-$taskManager = new TaskManager($conn);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $priority = $_POST['priority'];
-    $due_date = $_POST['due_date'];
-    $user_id = $_POST['user_id'];
-    $admin_id = $_SESSION['admin_id'];
-    $assigned_by = $user_id;
-
-    // Check if due date is in the past
-    $today = date('Y-m-d');
-    if ($due_date < $today) {
-        $message = "<p style='color:red;'>Error: Due date cannot be in the past.</p>";
-    } else {
-        if ($taskManager->assignTask($title, $description, $priority, $due_date, $user_id, $admin_id)) {
-            header("Location: tasks.php");
-            exit();
-        } else {
-            $message = "<p style='color:red;'>Error: Could not assign task.</p>";
-        }
-    }
-}
+include '../configs/crud.php';
 
 $crud = new crud();
-$users = $crud->R();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $profile_image = $_FILES['image']['name']; // <-- changed here
+    $role = $_POST['role']; // Default role for new users
+
+    $target_dir = "../../users/uploads/";
+    $target_file = $target_dir . basename($profile_image);
+
+    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) { // <-- changed here
+        if ($crud->C($username, $email, $password, $profile_image, $role)) {
+            header("Location: user_index.php");
+            exit();
+        } else {
+            echo "Error: Could not create user.";
+        }
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +32,9 @@ $users = $crud->R();
 
 <head>
     <meta charset="UTF-8">
-    <title>Assign Task</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+    <link rel="stylesheet" href="../css/form.css">
     <style>
         * {
             margin: 0;
@@ -67,6 +54,7 @@ $users = $crud->R();
             position: relative;
         }
 
+
         body::before {
             content: '';
             position: absolute;
@@ -76,6 +64,7 @@ $users = $crud->R();
             bottom: 0;
             backdrop-filter: blur(6px);
             background-color: rgba(255, 255, 255, 0.2);
+            /* Optional tint */
             z-index: 0;
         }
 
@@ -110,9 +99,9 @@ $users = $crud->R();
         }
 
         input[type="text"],
+        textarea,
         input[type="date"],
-        select,
-        textarea {
+        select {
             padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -162,33 +151,26 @@ $users = $crud->R();
 </head>
 
 <body>
-    <?php if (!empty($message)) echo $message; ?>
-    <main>
-        <section class="container">
-            <h2>Assign Task to User</h2>
-            <form action="assign_task.php" method="post">
-                <input type="text" name="title" placeholder="Task Title" required>
-                <textarea name="description" placeholder="Task Description" required></textarea>
-                <select name="priority" required>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-                <input type="date" name="due_date" required>
-                <select name="user_id" required>
-                    <?php foreach ($users as $user): ?>
-                        <?php if (isset($user['role']) && $user['role'] === 'user'): ?>
-                            <option value="<?php echo htmlspecialchars($user['id']); ?>">
-                                <?php echo htmlspecialchars($user['username']); ?>
-                            </option>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </select>
-                <input type="submit" value="Assign Task">
-            </form>
-            <p><a href="user_index.php">Return</a></p>
-        </section>
-    </main>
+    <div class="container">
+        <h2>Add User</h2>
+        <form action="user_create.php" method="post" enctype="multipart/form-data">
+            <label for="username">Username:</label>
+            <input type="text" name="username" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+            <label for="role">Role:</label>
+            <select name="role" id="role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <label for="image">Profile Image:</label>
+            <input type="file" name="image" required>
+            <input type="submit" value="Create User">
+        </form>
+        <p><a href="user_index.php">Return</a></p>
+    </div>
 </body>
 
 </html>

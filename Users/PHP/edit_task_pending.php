@@ -1,6 +1,6 @@
 <?php
-// filepath: /c:/wamp64/www/2nd_year/Task_Management_System/Users/PHP/edit_task.php
-include '../../db.php';
+require_once '../../admins/configs/db.php';
+require_once '../../admins/configs/taskmanager.php';
 session_start();
 
 // Check if the user is logged in
@@ -9,15 +9,29 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$task_id = $_GET['id'];
+$database = new Database();
+$conn = $database->connection();
+$taskManager = new TaskManager($conn);
 
-// Fetch the task details
-$sql_task = "SELECT * FROM tasks WHERE id = ? AND user_id = ?";
-$stmt = $conn->prepare($sql_task);
-$stmt->bind_param("ii", $task_id, $_SESSION['user_id']);
-$stmt->execute();
-$result_task = $stmt->get_result();
-$task = $result_task->fetch_assoc();
+$user_id = $_SESSION['user_id'];
+$task_id = $_GET['id'] ?? null;
+
+// Fetch the task details using OOP
+$task = null;
+if ($task_id) {
+    $tasks = $taskManager->getUserTasks($user_id);
+    foreach ($tasks as $t) {
+        if ($t['id'] == $task_id) {
+            $task = $t;
+            break;
+        }
+    }
+}
+
+if (!$task) {
+    echo "Task not found or you do not have permission.";
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
@@ -26,60 +40,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = $_POST['status'];
     $due_date = $_POST['due_date'];
 
-    // Prepare the SQL statement with placeholders
-    $stmt = $conn->prepare("UPDATE tasks SET title = ?, description = ?, priority = ?, status = ?, due_date = ?, updated_at = NOW() WHERE id = ? AND user_id = ?");
-    $stmt->bind_param("ssssssi", $title, $description, $priority, $status, $due_date, $task_id, $_SESSION['user_id']);
+    // Update the task using PDO
+    $sql = "UPDATE tasks SET title = ?, description = ?, priority = ?, status = ?, due_date = ?, updated_at = NOW() WHERE id = ? AND user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$title, $description, $priority, $status, $due_date, $task_id, $user_id]);
 
-    // Execute the statement
-    if ($stmt->execute()) {
-        // Check if the status is 'completed' and an image is uploaded
-        if ($status == 'completed' && isset($_FILES['task_image']) && $_FILES['task_image']['error'] == 0) {
-            $target_dir = "../../admins/tasks/";
-            $target_file = $target_dir . basename($_FILES["task_image"]["name"]);
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-            // Check if image file is a actual image or fake image
-            $check = getimagesize($_FILES["task_image"]["tmp_name"]);
-            if ($check !== false) {
-                $uploadOk = 1;
-            } else {
-                echo "File is not an image.";
-                $uploadOk = 0;
-            }
-
-            // Check file size
-            if ($_FILES["task_image"]["size"] > 500000) {
-                echo "Sorry, your file is too large.";
-                $uploadOk = 0;
-            }
-
-            // Allow certain file formats
-            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                $uploadOk = 0;
-            }
-
-            // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
-                // if everything is ok, try to upload file
-            } else {
-                if (move_uploaded_file($_FILES["task_image"]["tmp_name"], $target_file)) {
-                    echo "The file " . htmlspecialchars(basename($_FILES["task_image"]["name"])) . " has been uploaded.";
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
-                }
-            }
+    // Handle image upload if status is completed
+    if ($status == 'completed' && isset($_FILES['task_image']) && $_FILES['task_image']['error'] == 0) {
+        $target_dir = "../../admins/tasks/";
+        $target_file = $target_dir . basename($_FILES["task_image"]["name"]);
+        if (move_uploaded_file($_FILES["task_image"]["tmp_name"], $target_file)) {
+            // Save image filename to DB
+            $sql_img = "UPDATE tasks SET completed_image = ? WHERE id = ? AND user_id = ?";
+            $stmt_img = $conn->prepare($sql_img);
+            $stmt_img->execute([basename($_FILES["task_image"]["name"]), $task_id, $user_id]);
         }
-        header("Location: pending_task.php");
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
     }
 
-    // Close the statement
-    $stmt->close();
+    header("Location: pending_task.php");
+    exit();
 }
 ?>
 
@@ -89,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Edit Task</title>
-    <link rel="stylesheet" href="../CSS/form.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 
 <body>
@@ -114,10 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="file" name="task_image" id="task_image" accept="image/*">
                 </div>
                 <input type="submit" value="Update Task">
-                <input type="submit" value="Cancel" onclick="window.history.back(); return false;">
+                <input type="button" value="Cancel" onclick="window.history.back(); return false;">
             </form>
         </section>
     </main>
 </body>
-
 </html>

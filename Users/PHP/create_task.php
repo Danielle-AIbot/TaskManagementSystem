@@ -1,11 +1,11 @@
 <?php
-require_once '../configs/db.php';
-require_once '../configs/taskmanager.php';
-require_once '../configs/crud.php';
+require_once '../../admins/configs/db.php';
+require_once '../../admins/configs/taskmanager.php';
+require_once '../../admins/configs/crud.php';
 session_start();
 
 // Check if the admin is logged in
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: ../../index.php");
     exit();
 }
@@ -14,13 +14,13 @@ $database = new Database();
 $conn = $database->connection();
 $taskManager = new TaskManager($conn);
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $priority = $_POST['priority'];
     $due_date = $_POST['due_date'];
-    $user_id = $_POST['user_id'];
-    $admin_id = $_SESSION['admin_id'];
+    $user_id = $_SESSION['user_id'];
     $assigned_by = $user_id;
 
     // Check if due date is in the past
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($due_date < $today) {
         $message = "<p style='color:red;'>Error: Due date cannot be in the past.</p>";
     } else {
-        if ($taskManager->assignTask($title, $description, $priority, $due_date, $user_id, $admin_id)) {
+        if ($taskManager->createTask($title, $description, $priority, $due_date, $user_id, $user_id)) {
             header("Location: tasks.php");
             exit();
         } else {
@@ -37,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$crud = new crud();
-$users = $crud->R();
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +44,7 @@ $users = $crud->R();
 
 <head>
     <meta charset="UTF-8">
-    <title>Assign Task</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <title>Create Task</title>
     <style>
         * {
             margin: 0;
@@ -110,9 +107,9 @@ $users = $crud->R();
         }
 
         input[type="text"],
+        textarea,
         input[type="date"],
-        select,
-        textarea {
+        select {
             padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -145,6 +142,18 @@ $users = $crud->R();
             background: linear-gradient(to right, #a635df, #ff416c);
         }
 
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #a635df;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 30px 20px;
@@ -165,8 +174,8 @@ $users = $crud->R();
     <?php if (!empty($message)) echo $message; ?>
     <main>
         <section class="container">
-            <h2>Assign Task to User</h2>
-            <form action="assign_task.php" method="post">
+            <h2>Create Own Task</h2>
+            <form action="create_task.php" method="post">
                 <input type="text" name="title" placeholder="Task Title" required>
                 <textarea name="description" placeholder="Task Description" required></textarea>
                 <select name="priority" required>
@@ -175,18 +184,9 @@ $users = $crud->R();
                     <option value="High">High</option>
                 </select>
                 <input type="date" name="due_date" required>
-                <select name="user_id" required>
-                    <?php foreach ($users as $user): ?>
-                        <?php if (isset($user['role']) && $user['role'] === 'user'): ?>
-                            <option value="<?php echo htmlspecialchars($user['id']); ?>">
-                                <?php echo htmlspecialchars($user['username']); ?>
-                            </option>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </select>
-                <input type="submit" value="Assign Task">
+                <input type="submit" value="Create Task">
             </form>
-            <p><a href="user_index.php">Return</a></p>
+            <p><a href="tasks.php">Return</a></p>
         </section>
     </main>
 </body>

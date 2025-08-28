@@ -1,29 +1,32 @@
 <?php
-require_once '../../admins/configs/db.php';
 
 session_start();
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['admin_id'])) 
+{
     header("Location: dashboard.php");
     exit();
 }
 
-include '../../admins/configs/user-process.php';
+include '../configs/user-process.php';
 
 $user = new Users();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = new Users();
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    if ($user->Login($username, $password, 'user')) {
-        header('Location: dashboard.php');
+    $adminData = $user->Login($username, $password, 'admin');
+    if ($adminData) 
+    {
+        $_SESSION['admin_id'] = $adminData['id'];
+        header("Location: dashboard.php");
         exit();
-    } else {
-        $message = "<p style='color:red'>Invalid credentials.</p>";
+    }
+    else 
+    {
+        $message = "<p style='color: red;'>Invalid username or password.</p>";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="../css/form.css">
     <style>
         * {
             margin: 0;
@@ -141,8 +145,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php if (!empty($message)) echo $message; ?>
     <div class="container">
-        <h2>User Login</h2>
-        <form method="post">
+        <h2>Admin Login</h2>
+        <form action="login.php" method="post">
             <label for="username">Username:</label>
             <input type="text" name="username" required>
             <label for="password">Password:</label>

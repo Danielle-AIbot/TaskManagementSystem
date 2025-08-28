@@ -1,6 +1,9 @@
 <?php
+
+require_once '../../admins/configs/user-process.php';
 session_start();
-session_unset();
-session_destroy();
-header("Location: ../../Index.php");
-exit();
+
+$users = new Users();
+$users->Logout();
+// Redirect to login page after logout
+header("Location: ../../index.php");
